@@ -1,1 +1,3 @@
 pyautogui
+pynput
+socket

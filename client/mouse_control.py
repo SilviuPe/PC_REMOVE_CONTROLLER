@@ -43,25 +43,3 @@ class MouseController(object):
         :return: None
         """
         pyautogui.rightClick()
-
-MouseController().move([200,300])
-# # Move mouse to a specific screen position (x=100, y=200)
-# pyautogui.moveTo(100, 200, duration=1)  # duration=1s for smooth movement
-#
-# # Perform a left click
-# pyautogui.click()
-#
-# # Move to another location and double-click
-# pyautogui.moveTo(300, 400, duration=1)
-# pyautogui.doubleClick()
-#
-# # Move and right-click
-# pyautogui.moveTo(500, 500, duration=1)
-# pyautogui.rightClick()
-#
-# # Scroll down (positive = up, negative = down)
-# pyautogui.scroll(-500)
-#
-# # Optional: Drag the mouse (like selecting)
-# pyautogui.moveTo(600, 600, duration=1)
-# pyautogui.dragTo(700, 700, duration=2, button='left')

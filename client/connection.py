@@ -42,9 +42,8 @@ class Client(object):
 
             try:
 
-                data = self.client_socket.recv(1024).decode()
+                data = self.client_socket.recv(8192).decode()
                 data = data.split('\n')
-                print(data)
 
                 if not data:
 
@@ -56,7 +55,6 @@ class Client(object):
 
                         try:
                             serialized_action = json.loads(action)
-                            print(serialized_action)
                             self.callback(serialized_action)
                         except Exception as error:
 

@@ -73,7 +73,7 @@ class InputsController(object):
         x_value_from_percent = SCREEN_WIDTH * data['x'] / 100
         y_value_from_percent = SCREEN_HEIGHT * data['y'] / 100
 
-        pyautogui.moveTo(x_value_from_percent, y_value_from_percent, duration=0.1)
+        pyautogui.moveTo(x_value_from_percent, y_value_from_percent, duration=0.01)
 
     def click(self, data : dict) -> None:
         """
@@ -81,12 +81,13 @@ class InputsController(object):
         :param: data -> dict
         :return: None
         """
-
+        print(data['pressed'])
         if data['pressed']:
-
+            print("Mouse down", data['button'].split('.')[1])
             pyautogui.mouseDown(data['button'].split('.')[1])
 
         else:
+            print("Mouse up", data['button'].split('.')[1])
             pyautogui.mouseUp(data['button'].split('.')[1])
 
 

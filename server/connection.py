@@ -8,10 +8,11 @@ class Server(object):
 
     def __init__(self) -> None:
 
+        self.running = True
 
         # sockets.gethostbyname -> localhost
-        self.address = socket.gethostbyname('192.168.0.108')
-        self.port = 44324
+        self.address = socket.gethostbyname('192.168.0.100') # Change me
+        self.port = 4500 # Change me
 
         # create the server socket
         self.server_socket = None
@@ -23,6 +24,10 @@ class Server(object):
         # start the listener for new clients
         Thread(target=self.listen_for_clients).start()
 
+    def close(self) -> None:
+
+        self.server_socket.close()
+        self.running = False
 
     def create_server(self, binder_data : tuple) -> None:
         """
@@ -48,7 +53,7 @@ class Server(object):
         :return:
         """
 
-        while True:
+        while self.running:
 
             # accept client
 

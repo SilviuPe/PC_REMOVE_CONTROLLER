@@ -59,29 +59,8 @@ class Monitor(object):
 
     def __init__(self, callback: Any):
         self.callback = callback
-        self.last_move = [100 * pyautogui.position()[0] / SCREEN_WIDTH, 100 * pyautogui.position()[1] / SCREEN_HEIGHT]
-
-    def on_move(self, x, y):
-
-        percent_of_screen_x = 100 * x / SCREEN_WIDTH
-        percent_of_screen_x = math.trunc(percent_of_screen_x * 100) / 100
-
-        percent_of_screen_y = 100 * y / SCREEN_HEIGHT
-        percent_of_screen_y = math.trunc(percent_of_screen_y * 100) / 100
-
-        # check difference
-
-        if math.sqrt((self.last_move[0] - percent_of_screen_x) ** 2) >= 1  or math.sqrt((self.last_move[1] - percent_of_screen_y) ** 2) >= 1:
-
-            event_data = {"type": "move", "data" : {
-                "position" : {
-                    "x": percent_of_screen_x, "y": percent_of_screen_y
-                }
-            }}
-
-            self.callback(event_data)
-
-            self.last_move = [percent_of_screen_x, percent_of_screen_y]
+        self.mouse_monitor = None
+        self.keyboard_monitor = None
 
 
     def on_click(self, x, y, button, pressed):
@@ -141,14 +120,25 @@ class Monitor(object):
         #     # Stop the listener
         #     return False
 
+
+        self.mouse_monitor = None
+        self.keyboard_monitor = None
+
+    def stop_listeners(self):
+        if self.mouse_monitor:
+            self.mouse_monitor.stop()
+        if self.keyboard_monitor:
+            self.keyboard_monitor.stop()
+
     def start_mouse_listener(self):
-        with mouse.Listener(
+
+        self.mouse_monitor = mouse.Listener(
             on_click=self.on_click,
-            on_scroll=self.on_scroll) as listener:
-            listener.join()
+            on_scroll=self.on_scroll)
+        self.mouse_monitor.start()
 
     def start_keyboard_listener(self):
-        with keyboard.Listener(
+        self.keyboard_monitor = keyboard.Listener(
             on_press=self.on_press,
-            on_release=self.on_release) as listener:
-            listener.join()
+            on_release=self.on_release)
+        self.keyboard_monitor.start()

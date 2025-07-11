@@ -149,6 +149,31 @@ class InputsController(object):
             elif type_ == 'release':
                 pyautogui.keyUp(key)
 
+    def scroll(self, data):
+
+        if 'dy' in data and 'dx' in data:
+
+            direction_y = data['dy']
+            direction_x = data['dx']
+            position = (data['x'],data['y'])
+            print(position)
+            try:
+                if direction_y != 0:
+                    pyautogui.moveTo(x=position[0], y=position[1])
+                    pyautogui.scroll(clicks= direction_y*120, x=position[0], y=position[1])
+
+                if direction_x != 0:
+                    pyautogui.moveTo(x=position[0], y=position[1])
+                    pyautogui.keyDown('shift')
+                    pyautogui.scroll(clicks=direction_x * 120, x=position[0], y=position[1])
+                    pyautogui.keyUp('shift')
+
+            except Exception as error:
+
+                print("Error trying to scroll", str(error))
+
+
+
 
 
 

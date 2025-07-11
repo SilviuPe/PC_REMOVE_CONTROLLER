@@ -31,7 +31,14 @@ class MainApp(object):
     def __init__(self) -> None:
 
         # Monitor object
+        self.server = None
+        self.monitor = None
 
+        self.mouse_thread = None
+        self.keyboard_thread = None
+
+
+    def start_server(self) -> None:
         self.server = Server()
         self.monitor = Monitor(self.handle_event)
 

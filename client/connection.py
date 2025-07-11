@@ -9,10 +9,11 @@ class Client(object):
 
     def __init__(self, callback) -> None:
 
+        self.running = True
 
         # sockets.gethostbyname -> localhost
-        self.address = socket.gethostbyname('192.168.0.103')
-        self.port = 44320
+        self.address = socket.gethostbyname('192.168.0.100') # Same as the server
+        self.port = 4500 # Same as the server
 
         # create the server socket
         self.client_socket = None
@@ -35,10 +36,14 @@ class Client(object):
 
             print(str(error))
 
+    def close(self) -> None:
+        self.client_socket.close()
+        self.running = False
+
 
     def receive_data(self) -> None:
 
-        while True:
+        while self.running:
 
             try:
 

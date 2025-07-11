@@ -9,9 +9,15 @@ class MainApp(object):
 
     def __init__(self) -> None:
 
+        self.client =  None
+        self.controller = None
+
+
+    def start_client(self) -> None:
         self.client = Client(self.handle_data)
         self.controller = InputsController()
         self.client.receive_data()
+
 
     def handle_data(self, data: dict) -> None:
 
@@ -29,4 +35,7 @@ class MainApp(object):
             elif type_ == "release" or type_ == "press":
 
                 self.controller.key_input(data)
-MainApp()
+
+            elif type_ == "mouse_scroll":
+
+                self.controller.scroll(data)

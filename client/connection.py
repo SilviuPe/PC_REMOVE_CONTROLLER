@@ -12,7 +12,7 @@ class Client(object):
 
         # sockets.gethostbyname -> localhost
         self.address = socket.gethostbyname('192.168.0.103')
-        self.port = 44321
+        self.port = 44320
 
         # create the server socket
         self.client_socket = None

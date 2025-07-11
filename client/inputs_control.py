@@ -61,7 +61,22 @@ class InputsController(object):
 
     def __init__(self) -> None:
 
-        pass
+        self.last_mouse_pos = []
+        self.last_press = None
+        self.last_button = None
+
+        self.previous_data = {
+            'left' :{
+                'pressed' : False,
+                'position' : []
+            },
+        }
+
+        self.keys_hold = {
+            'key_still_pressed' : False,
+            'keys_hold' : []
+        }
+
 
     def move(self, data : dict) -> None:
         """
@@ -89,12 +104,52 @@ class InputsController(object):
         y_value_from_percent = SCREEN_HEIGHT * position['y'] / 100
 
         if data['pressed']:
+
+            if data['button'].split('.')[1] == 'left':
+
+                self.previous_data['left']['pressed'] = True
+                self.previous_data['left']['position'] = [x_value_from_percent, y_value_from_percent]
+
+
             print("Mouse down", data['button'].split('.')[1])
             pyautogui.mouseDown(button=data['button'].split('.')[1], x=x_value_from_percent, y=y_value_from_percent)
 
         else:
+
+            if data['button'].split('.')[1] == 'left':
+
+                self.previous_data['left']['pressed'] = False
+
+                if self.previous_data['left']['position'][0] != x_value_from_percent or self.previous_data['left']['position'][1] != y_value_from_percent:
+                        print("Dragging detected!")
+                        pyautogui.mouseDown(button=data['button'].split('.')[1], x=self.previous_data['left']['position'][0], y=self.previous_data['left']['position'][1])
+                        time.sleep(0.25)
+                        pyautogui.moveTo(x_value_from_percent, y_value_from_percent, duration=0.25)
+                        time.sleep(0.25)
+                        pyautogui.mouseUp(button=data['button'].split('.')[1]) # , x=x_value_from_percent, y=y_value_from_percent
+                        self.previous_data['left']['position'] = [x_value_from_percent,y_value_from_percent]
+                        return
+
             print("Mouse up", data['button'].split('.')[1])
             pyautogui.mouseUp(button=data['button'].split('.')[1], x=x_value_from_percent, y=y_value_from_percent)
+
+    def key_input(self,data) -> None:
+
+        if 'type' in data:
+
+            type_ = data['type']
+            if len(data['key_char']) > 1:
+
+                key = data['key_char'].split('.')[1]
+            else:
+                key = data['key_char']
+            if type_ == 'press':
+                pyautogui.keyDown(key)
+
+            elif type_ == 'release':
+                pyautogui.keyUp(key)
+
+
 
 
 

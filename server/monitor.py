@@ -115,6 +115,7 @@ class Monitor(object):
             "dx": dx,
             "dy": dy
         }
+        print(dx,dy)
         self.callback(event_data)
 
     def on_press(self, key):

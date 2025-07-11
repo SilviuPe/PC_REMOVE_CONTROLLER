@@ -16,9 +16,8 @@ class MainApp(object):
     def handle_data(self, data: dict) -> None:
 
         if 'type' in data:
-            print(data['data']['position'])
             type_ = data['type']
-
+            print(data)
             if type_ == "move":
 
                 self.controller.move(data['data']['position'])
@@ -27,4 +26,7 @@ class MainApp(object):
 
                 self.controller.click(data['data'])
 
+            elif type_ == "release" or type_ == "press":
+
+                self.controller.key_input(data)
 MainApp()

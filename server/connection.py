@@ -1,4 +1,4 @@
-import sockets
+import socket
 import json
 
 from threading import Thread
@@ -10,11 +10,12 @@ class Server(object):
 
 
         # sockets.gethostbyname -> localhost
-        self.address = sockets.gethostbyname()
+        self.address = socket.gethostbyname('192.168.0.108')
         self.port = 44324
 
         # create the server socket
-        self.server_socket = self.create_server((self.address, self.port))
+        self.server_socket = None
+        self.create_server((self.address, self.port))
 
         # clients connected to the server
         self.clients = list()
@@ -23,24 +24,22 @@ class Server(object):
         Thread(target=self.listen_for_clients).start()
 
 
-    def create_server(self, binder_data : tuple) -> sockets.socket | None:
+    def create_server(self, binder_data : tuple) -> None:
         """
         Method to create a server
         :binder_data: tuple -> (address, port)
         :return:  socket object
         """
         try:
-            socket = sockets.socket(sockets.AF_INET, sockets.SOCK_STREAM)
-            socket.bind(binder_data)
+            self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.server_socket.bind(binder_data)
 
-            socket.listen()
-
-            return socket
+            self.server_socket.listen()
 
         except Exception as error:
 
             print(str(error))
-            return None
+
 
 
     def listen_for_clients(self) -> None:
@@ -59,6 +58,9 @@ class Server(object):
                 'socket' : client_socket,
                 'address' : client_address,
             }
+
+            print("New client has connected: ", client_data['address'])
+
             self.clients.append(client_data)
 
     def remove_client(self) -> None:
@@ -74,23 +76,26 @@ class Server(object):
         Method to send data to all clients
 
         :param: data -> dictionary containing the action and value
-                eg.
-                { "move" :
-                    { "x" : 200,
-                      "y" : 400
-                    }
-                }
-
         :return: None
         """
 
         try:
 
-            serialized_data = json.dumps(data).encode()
+            serialized_data = (json.dumps(data) + "\n").encode()
 
             for client in self.clients:
 
-                client['socket'].sendall(serialized_data)
+                try:
+                    client['socket'].send(serialized_data)
+
+
+                    print(f"Successfully sent data to {client['address'][0]}")
+                except Exception as error:
+
+                    print(f"Error trying to sent data to {client['address'][0]}",str(error))
+
+                    client['socket'].close()
+                    self.clients.remove(client)
 
         except Exception as error:
 

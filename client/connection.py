@@ -54,9 +54,14 @@ class Client(object):
 
                     for action in data:
 
-                        serialized_action = json.loads(action)
-                        print(serialized_action)
-                        self.callback(serialized_action)
+                        try:
+                            serialized_action = json.loads(action)
+                            print(serialized_action)
+                            self.callback(serialized_action)
+                        except Exception as error:
+
+                            continue
+
                     print("Received data:", data)
 
 

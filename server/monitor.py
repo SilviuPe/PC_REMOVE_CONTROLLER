@@ -85,12 +85,19 @@ class Monitor(object):
 
 
     def on_click(self, x, y, button, pressed):
+
+        percent_of_screen_x = 100 * x / SCREEN_WIDTH
+        percent_of_screen_x = math.trunc(percent_of_screen_x * 100) / 100
+
+        percent_of_screen_y = 100 * y / SCREEN_HEIGHT
+        percent_of_screen_y = math.trunc(percent_of_screen_y * 100) / 100
+
         event_data = {
             "type": "click",
             "data" : {
                 "position" : {
-                    "x": x,
-                    "y": y,
+                    "x": percent_of_screen_x,
+                    "y": percent_of_screen_y,
                 },
                 "button": str(button),
                 "pressed": pressed

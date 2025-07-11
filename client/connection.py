@@ -11,8 +11,8 @@ class Client(object):
 
 
         # sockets.gethostbyname -> localhost
-        self.address = socket.gethostbyname('192.168.0.108')
-        self.port = 44324
+        self.address = socket.gethostbyname('192.168.0.103')
+        self.port = 44321
 
         # create the server socket
         self.client_socket = None
@@ -59,8 +59,6 @@ class Client(object):
                         except Exception as error:
 
                             continue
-
-                    print("Received data:", data)
 
 
             except Exception as error:

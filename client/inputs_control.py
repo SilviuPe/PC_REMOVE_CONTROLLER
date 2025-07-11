@@ -81,14 +81,20 @@ class InputsController(object):
         :param: data -> dict
         :return: None
         """
-        print(data['pressed'])
+        print(data, "test")
+        position = data['position']
+        print(position)
+
+        x_value_from_percent = SCREEN_WIDTH * position['x'] / 100
+        y_value_from_percent = SCREEN_HEIGHT * position['y'] / 100
+
         if data['pressed']:
             print("Mouse down", data['button'].split('.')[1])
-            pyautogui.mouseDown(data['button'].split('.')[1])
+            pyautogui.mouseDown(button=data['button'].split('.')[1], x=x_value_from_percent, y=y_value_from_percent)
 
         else:
             print("Mouse up", data['button'].split('.')[1])
-            pyautogui.mouseUp(data['button'].split('.')[1])
+            pyautogui.mouseUp(button=data['button'].split('.')[1], x=x_value_from_percent, y=y_value_from_percent)
 
 
 
